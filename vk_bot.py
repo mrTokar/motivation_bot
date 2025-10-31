@@ -1,15 +1,14 @@
 import vk_api
+import os
 from random import randint
+from dotenv import load_dotenv
 
 class VkBot:
     __token = ""
 
     def __init__(self):
         # read token
-        with open("token.txt") as token_file:
-            self.__token = token_file.readline()
-        if (self.__token == ""):
-            raise Exception("Empty token")
+        self.__token = os.getenv("VK_API_KEY")
 
         vk_session= vk_api.VkApi(token=self.__token)
         self._api = vk_session.get_api()
@@ -19,5 +18,6 @@ class VkBot:
 
 
 if __name__ == "__main__":
+    load_dotenv()
     bot = VkBot()
     bot.send_message(295004935, "This is bot")
