@@ -1,2 +1,6 @@
-token.txt
-test.py
+.venv
+.vscode
+__pycache__/
+source/
+.env
+test.*
