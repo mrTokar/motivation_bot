@@ -1,3 +1,4 @@
+import json
 
 def parce_blocks(filename: str, sep_line: str):
     """Return text between `sep_line`"""
@@ -11,6 +12,12 @@ def parce_blocks(filename: str, sep_line: str):
                 text += line
         if text: yield text
 
+def get_messages_from_json(filename:str):
+    """Return cortege (id, meassage) from `filename` in json format"""
+    with open(filename, encoding="utf-8") as file:
+        json_data = json.load(file)
+    for key, value in json_data.items():
+        yield int(key), value
 
 def get_messages(filename: str, sep_line: str):
     """Return cortege (id, meassage) from `filename` separated by `sep_line`"""
@@ -31,7 +38,5 @@ def get_messages(filename: str, sep_line: str):
 
 
 if __name__ == "__main__":
-    for vk_id, mes in get_messages('source\\motivational_messages.txt', '================================================================================'):
-        print("User:", vk_id)
-        print("Message:", mes)
-        print("-----")
+   for vk_id, text in get_messages_from_json("source\motivational_messages.json"):
+       print(f"{vk_id}\n{text}\n---")
