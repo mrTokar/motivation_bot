@@ -16,6 +16,23 @@ def select_file(comment=""):
             selected_file = os.listdir(PATH_TO_DIR)[int(usr_input) - 1]
             return os.path.join(PATH_TO_DIR, selected_file)
 
+def request(comment, default_answer=True) -> bool:
+    print(comment, end="")
+    if default_answer:
+        print(" [Y/n]: ", end="")
+    else:
+        print(" [y/N]: ", end="")
+
+    usr_input = input().strip().lower()
+    if default_answer:
+        if usr_input in ["n", "no"]:
+            return False
+        return True
+    else:
+        if usr_input in ["y", "yes"]:
+            return True
+        return False
+
 if __name__ == "__main__":
     print(__file__)
     print(os.path.dirname(__file__))
