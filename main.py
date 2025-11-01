@@ -21,13 +21,13 @@ class MotivationBot:
     def run(self):
         if self.motivation_path == "":
             self.get_file_path()
-            
-        for vk_id, message in get_messages(self.motivation_path):
+
+        if (gui.request("Хотите заменить разделяющую строку?", default_answer=False)):
+            self.sep_line = input("Введите новую разделяющую строку: ")
+
+        for vk_id, message in get_messages(self.motivation_path, self.sep_line):
             self.bot.send_message(vk_id, message)
-            print(f"Sent to {vk_id}: {message}")
+            print(f"Sent to {vk_id}")
     
-
-    
-
 if __name__ == "__main__":
     MotivationBot().run()
