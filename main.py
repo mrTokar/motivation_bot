@@ -3,7 +3,7 @@ from vk_bot import VkBot
 from parse import get_messages_from_json
 from dotenv import load_dotenv
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 class MotivationBot(VkBot):
     motivation_path = ""
@@ -37,9 +37,15 @@ class MotivationBot(VkBot):
     def _send_messages_from_file(self):
         """Send motivational messages from file to users"""
         try:
-            for vk_id, message in get_messages_from_json(self.motivation_path):
-                self.send_message(vk_id, message)
-                print(f"Sent to {vk_id}")
+            messages = get_messages_from_json(self.motivation_path)
+        except Exception as e:
+            print("Ошибка при чтении файла с сообщениями:", e)
+            return
+        
+        try:
+            for message in messages:
+                self.send_message(message["vk_id"], message["text"])
+                print(f"Sent to {message['vk_id']}")
         except Exception as e:
             print("Ошибка при отправке сообщений:", e)
 
