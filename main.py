@@ -1,6 +1,6 @@
 import console_gui as gui
 from vk_bot import VkBot
-from parce import get_messages
+from parse import get_messages
 from dotenv import load_dotenv
 
 __version__ = "1.0.0"
