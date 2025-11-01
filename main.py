@@ -3,7 +3,7 @@ from vk_bot import VkBot
 from parse import get_messages_from_json
 from dotenv import load_dotenv
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 class MotivationBot:
     motivation_path = ""
@@ -12,7 +12,7 @@ class MotivationBot:
     def __init__(self):
         print("Motivation Bot", __version__)
         load_dotenv()
-        self.bot = VkBot()
+        self._bot = VkBot()
     
     def _get_file_path(self):
         print("Загрузите индивидуальные мотивационнаые сообщения...")
@@ -20,7 +20,7 @@ class MotivationBot:
 
     def _send_messages(self):
         for vk_id, message in get_messages_from_json(self.motivation_path):
-            self.bot.send_message(vk_id, message)
+            self._bot.send_message(vk_id, message)
             print(f"Sent to {vk_id}")
     
     def run(self):
@@ -29,7 +29,7 @@ class MotivationBot:
                 self._get_file_path()
             if gui.request("Хотите загрузить изображение?"):
                 self.photo_path = gui.select_file("изображения")
-                self.bot.upload_photo(self.photo_path)
+                self._bot.upload_photo(self.photo_path)
             print()
             
             print(f"Загруженные данные: \n-текст: {self.motivation_path} \n-изображение: {self.photo_path}")
