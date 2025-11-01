@@ -23,6 +23,9 @@ class VkBot:
             print("Failed to upload photo")
             return False
 
+    def remove_photo(self):
+        self._photo = ""
+
     def send_message(self, user_id: int, text: str):
         if self._photo == "":
             self._api.messages.send(
