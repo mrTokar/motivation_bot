@@ -17,22 +17,31 @@ class VkBot:
     def upload_photo(self, photo_file:str) -> bool:
         if os.path.exists(photo_file):
             response = self._upload.photo_messages(photo_file)[0]
-            self._photo = f"photo{response["owner_id"]}_{response["photo_id"]}_{response["access_key"]}"
+            self._photo = f"photo{response["owner_id"]}_{response["id"]}"
             return True
         else:
             print("Failed to upload photo")
             return False
 
     def send_message(self, user_id: int, text: str):
-        self._api.messages.send(
-            user_id= user_id,
-            random_id= get_random_id(),
-            message= text
-        )
+        if self._photo == "":
+            self._api.messages.send(
+                user_id= user_id,
+                random_id= get_random_id(),
+                message= text
+            )
+        else:
+            self._api.messages.send(
+                user_id= user_id,
+                random_id= get_random_id(),
+                message= text,
+                attachment= self._photo
+            )
 
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
     load_dotenv()
     bot = VkBot()
+    bot.upload_photo("source/image.jpg")
     bot.send_message(295004935, "This is bot")
