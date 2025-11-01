@@ -16,7 +16,7 @@ class MotivationBot:
     
     def _get_file_path(self):
         print("Загрузите индивидуальные мотивационнаые сообщения...")
-        self.motivation_path = gui.select_file("с мотивационными сообщениями (.json)")
+        self.motivation_path = gui.select_file(".json", comment="с мотивационными сообщениями")
 
     def _send_messages(self):
         for vk_id, message in get_messages_from_json(self.motivation_path):
@@ -28,13 +28,16 @@ class MotivationBot:
             if self.motivation_path == "":
                 self._get_file_path()
             if gui.request("Хотите загрузить изображение?"):
-                self.photo_path = gui.select_file("изображения")
+                self.photo_path = gui.select_file(
+                    ".jpg", ".jpeg", ".png", ".gif",
+                    comment="изображения"
+                )
                 self._bot.upload_photo(self.photo_path)
             print()
             
             print(f"Загруженные данные: \n-текст: {self.motivation_path} \n-изображение: {self.photo_path}")
             if gui.request("Все верно? Отправляем сообщения?"): break
-
+        # Отправка сообщений
         self._send_messages()   
     
 if __name__ == "__main__":
