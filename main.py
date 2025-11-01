@@ -1,14 +1,13 @@
 import console_gui as gui
 from vk_bot import VkBot
-from parse import get_messages
+from parse import get_messages_from_json
 from dotenv import load_dotenv
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 class MotivationBot:
     motivation_path = ""
     photo_path = ""
-    sep_line = "="*80
 
     def __init__(self):
         print("Motivation Bot", __version__)
@@ -17,17 +16,15 @@ class MotivationBot:
     
     def _get_file_path(self):
         print("Загрузите индивидуальные мотивационнаые сообщения...")
-        self.motivation_path = gui.select_file("с мотивационными сообщениями")
-        if (gui.request("Хотите заменить разделяющую строку?", default_answer=False)):
-            self.sep_line = input("Введите новую разделяющую строку: ")
+        self.motivation_path = gui.select_file("с мотивационными сообщениями (.json)")
 
     def _send_messages(self):
-        for vk_id, message in get_messages(self.motivation_path, self.sep_line):
+        for vk_id, message in get_messages_from_json(self.motivation_path):
             self.bot.send_message(vk_id, message)
             print(f"Sent to {vk_id}")
     
     def run(self):
-        while True:
+        while True:  # основной цикл для подтверждения загруженных данных
             if self.motivation_path == "":
                 self._get_file_path()
             if gui.request("Хотите загрузить изображение?"):
