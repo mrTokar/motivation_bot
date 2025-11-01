@@ -3,7 +3,7 @@ from vk_bot import VkBot
 from parce import get_messages
 from dotenv import load_dotenv
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 class MotivationBot:
     motivation_path = ""
@@ -28,7 +28,9 @@ class MotivationBot:
     def run(self):
         if self.motivation_path == "":
             self.get_file_path()
-
+        if gui.request("Хотите загрузить изображение?"):
+            self.bot.upload_photo(gui.select_file("изображения"))
+        
         self.send_messages()
             
     
