@@ -1,44 +1,62 @@
 import console_gui as gui
 from vk_bot import VkBot
-from parce import get_messages
+from parse import get_messages_from_json
 from dotenv import load_dotenv
 
-__version__ = "1.0.0"
+__version__ = "1.2.0"
 
-class MotivationBot:
+class MotivationBot(VkBot):
     motivation_path = ""
     photo_path = ""
-    sep_line = "="*80
 
     def __init__(self):
         print("Motivation Bot", __version__)
         load_dotenv()
-        self.bot = VkBot()
-    
-    def _get_file_path(self):
-        print("Загрузите индивидуальные мотивационнаые сообщения...")
-        self.motivation_path = gui.select_file("с мотивационными сообщениями")
-        if (gui.request("Хотите заменить разделяющую строку?", default_answer=False)):
-            self.sep_line = input("Введите новую разделяющую строку: ")
+        super().__init__()
 
-    def _send_messages(self):
-        for vk_id, message in get_messages(self.motivation_path, self.sep_line):
-            self.bot.send_message(vk_id, message)
-            print(f"Sent to {vk_id}")
-    
+    def _get_motivation_path(self):
+        """Load motivational messages file path from user"""
+        print("Загрузите индивидуальные мотивационнаые сообщения...")
+        self.motivation_path = gui.select_file(
+            ".json", 
+            comment="с мотивационными сообщениями"
+        )
+
+    def _get_photo_path(self):
+        """Load photo file path from user"""
+        print("Загрузите изображение...")
+        self.photo_path = gui.select_file(
+            ".jpg", ".jpeg", ".png", ".gif",
+            comment="изображения"
+        )
+        try:
+            self.upload_photo(self.photo_path)
+        except Exception as e:
+            print("Ошибка при загрузке изображения:", e)
+
+    def _send_messages_from_file(self):
+        """Send motivational messages from file to users"""
+        try:
+            for vk_id, message in get_messages_from_json(self.motivation_path):
+                self.send_message(vk_id, message)
+                print(f"Sent to {vk_id}")
+        except Exception as e:
+            print("Ошибка при отправке сообщений:", e)
+
     def run(self):
-        while True:
+        """Main method to run the Motivation Bot"""
+        while True:  # loop until user confirms data
             if self.motivation_path == "":
                 self._get_file_path()
             if gui.request("Хотите загрузить изображение?"):
-                self.photo_path = gui.select_file("изображения")
-                self.bot.upload_photo(self.photo_path)
+                self._get_photo_path()
+
             print()
             
             print(f"Загруженные данные: \n-текст: {self.motivation_path} \n-изображение: {self.photo_path}")
             if gui.request("Все верно? Отправляем сообщения?"): break
-
-        self._send_messages()   
+        # Send messages
+        self._send_messages_from_file()   
     
 if __name__ == "__main__":
     MotivationBot().run()
