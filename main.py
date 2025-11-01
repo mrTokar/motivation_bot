@@ -3,7 +3,7 @@ from vk_bot import VkBot
 from parce import get_messages
 from dotenv import load_dotenv
 
-__version__ = "0.2.1"
+__version__ = "1.0.0"
 
 class MotivationBot:
     motivation_path = ""
