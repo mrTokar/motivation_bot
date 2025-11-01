@@ -3,6 +3,8 @@ import os
 PATH_TO_DIR = os.getcwd() + "\\source"
 
 def select_file(*extensions: str, comment="") -> str:
+    """Select file from PATH_TO_DIR with given extensions.
+    If `extensions` are empty, all files are shown."""
     while True:
         #print list
         print(f"Выбитие необходимый файл {comment} из предложенных ниже. Если нужный файл отсутствует, добавьте его в дирректорию")
@@ -30,6 +32,7 @@ def select_file(*extensions: str, comment="") -> str:
             return os.path.join(PATH_TO_DIR, selected_file)
 
 def request(comment, default_answer=True) -> bool:
+    """Request user confirmation with a yes/no question."""
     print(comment, end="")
     if default_answer:
         print(" [Y/n]: ", end="")

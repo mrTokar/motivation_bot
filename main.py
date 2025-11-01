@@ -3,7 +3,7 @@ from vk_bot import VkBot
 from parse import get_messages_from_json
 from dotenv import load_dotenv
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 
 class MotivationBot(VkBot):
     motivation_path = ""
@@ -15,6 +15,7 @@ class MotivationBot(VkBot):
         super().__init__()
 
     def _get_motivation_path(self):
+        """Load motivational messages file path from user"""
         print("Загрузите индивидуальные мотивационнаые сообщения...")
         self.motivation_path = gui.select_file(
             ".json", 
@@ -22,6 +23,7 @@ class MotivationBot(VkBot):
         )
 
     def _get_photo_path(self):
+        """Load photo file path from user"""
         print("Загрузите изображение...")
         self.photo_path = gui.select_file(
             ".jpg", ".jpeg", ".png", ".gif",
@@ -33,6 +35,7 @@ class MotivationBot(VkBot):
             print("Ошибка при загрузке изображения:", e)
 
     def _send_messages_from_file(self):
+        """Send motivational messages from file to users"""
         try:
             for vk_id, message in get_messages_from_json(self.motivation_path):
                 self.send_message(vk_id, message)
@@ -41,7 +44,8 @@ class MotivationBot(VkBot):
             print("Ошибка при отправке сообщений:", e)
 
     def run(self):
-        while True:  # основной цикл для подтверждения загруженных данных
+        """Main method to run the Motivation Bot"""
+        while True:  # loop until user confirms data
             if self.motivation_path == "":
                 self._get_file_path()
             if gui.request("Хотите загрузить изображение?"):
@@ -51,7 +55,7 @@ class MotivationBot(VkBot):
             
             print(f"Загруженные данные: \n-текст: {self.motivation_path} \n-изображение: {self.photo_path}")
             if gui.request("Все верно? Отправляем сообщения?"): break
-        # Отправка сообщений
+        # Send messages
         self._send_messages_from_file()   
     
 if __name__ == "__main__":
