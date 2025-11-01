@@ -3,7 +3,7 @@ from vk_bot import VkBot
 from parce import get_messages
 from dotenv import load_dotenv
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 class MotivationBot:
     motivation_path = ""
@@ -17,17 +17,20 @@ class MotivationBot:
     def get_file_path(self):
         print("Загрузите индивидуальные мотивационнаые сообщения...")
         self.motivation_path = gui.select_file("с мотивационными сообщениями")
+        if (gui.request("Хотите заменить разделяющую строку?", default_answer=False)):
+            self.sep_line = input("Введите новую разделяющую строку: ")
 
+    def send_messages(self):
+        for vk_id, message in get_messages(self.motivation_path, self.sep_line):
+            self.bot.send_message(vk_id, message)
+            print(f"Sent to {vk_id}")
+    
     def run(self):
         if self.motivation_path == "":
             self.get_file_path()
 
-        if (gui.request("Хотите заменить разделяющую строку?", default_answer=False)):
-            self.sep_line = input("Введите новую разделяющую строку: ")
-
-        for vk_id, message in get_messages(self.motivation_path, self.sep_line):
-            self.bot.send_message(vk_id, message)
-            print(f"Sent to {vk_id}")
+        self.send_messages()
+            
     
 if __name__ == "__main__":
     MotivationBot().run()
