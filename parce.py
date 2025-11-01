@@ -1,11 +1,10 @@
 import json
 
-def get_messages_from_json(filename:str):
+def get_messages_from_json(filename:str) -> list[tuple[int, str]]:
     """Return cortege (id, meassage) from `filename` in json format"""
     with open(filename, encoding="utf-8") as file:
         json_data = json.load(file)
-    for key, value in json_data.items():
-        yield int(key), value
+    return json_data["students"]
 
 def get_messages(filename: str, sep_line: str):
     """Return cortege (id, meassage) from `filename` separated by `sep_line`"""
