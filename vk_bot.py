@@ -1,7 +1,6 @@
 import vk_api
 import os
 from random import randint
-from dotenv import load_dotenv
 
 class VkBot:
     __token = ""
@@ -18,6 +17,7 @@ class VkBot:
 
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv
     load_dotenv()
     bot = VkBot()
     bot.send_message(295004935, "This is bot")
