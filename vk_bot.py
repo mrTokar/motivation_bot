@@ -1,6 +1,6 @@
-import vk_api
 import os
-from random import randint
+from vk_api import VkApi
+from vk_api.utils import get_random_id
 
 class VkBot:
     __token = ""
@@ -9,11 +9,15 @@ class VkBot:
         # read token
         self.__token = os.getenv("VK_API_KEY")
 
-        vk_session= vk_api.VkApi(token=self.__token)
+        vk_session= VkApi(token=self.__token)
         self._api = vk_session.get_api()
 
     def send_message(self, user_id: int, text: str):
-        self._api.messages.send(user_id= user_id, random_id=randint(1, 2**30), message=text)
+        self._api.messages.send(
+            user_id= user_id,
+            random_id= get_random_id(),
+            message= text
+        )
 
 
 if __name__ == "__main__":
