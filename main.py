@@ -53,7 +53,7 @@ class MotivationBot(VkBot):
         """Main method to run the Motivation Bot"""
         while True:  # loop until user confirms data
             if self.motivation_path == "":
-                self._get_file_path()
+                self._get_motivation_path()
             if gui.request("Хотите загрузить изображение?"):
                 self._get_photo_path()
 

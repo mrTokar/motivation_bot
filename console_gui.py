@@ -10,8 +10,10 @@ def select_file(*extensions: str, comment="") -> str:
         print(f"Выбитие необходимый файл {comment} из предложенных ниже. Если нужный файл отсутствует, добавьте его в дирректорию")
         print(PATH_TO_DIR)
         i = 1
+        listdir = []
         for file in os.listdir(PATH_TO_DIR):
             if len(extensions) == 0 or file.endswith(extensions):
+                listdir.append(file)
                 print(f"{i}. {file}")
                 i += 1
 
@@ -28,8 +30,10 @@ def select_file(*extensions: str, comment="") -> str:
         print("\nВведите 0 для обновления списка файлов")
         usr_input = input(">>> ").strip()
         if usr_input.isdigit() and 1 <= int(usr_input) < i:
-            selected_file = os.listdir(PATH_TO_DIR)[int(usr_input) - 1]
-            return os.path.join(PATH_TO_DIR, selected_file)
+            selected_file = listdir[int(usr_input) - 1]
+            path_to_file = os.path.join(PATH_TO_DIR, selected_file)
+            if os.path.isfile(path_to_file):
+                return path_to_file
 
 def request(comment, default_answer=True) -> bool:
     """Request user confirmation with a yes/no question."""
